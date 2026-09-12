@@ -2,7 +2,7 @@
 
 # boss
 
-**关键判断交给 Boss，明确任务交给 Worker。**
+**复杂任务交给 Boss，常规工作交给 Worker。**
 
 [English](README.en.md)
 

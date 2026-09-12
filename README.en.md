@@ -2,7 +2,7 @@
 
 # boss
 
-**Let Boss make the calls. Give Worker well-defined tasks.**
+**Give complex tasks to Boss and routine work to Worker.**
 
 [简体中文](README.md)
 
