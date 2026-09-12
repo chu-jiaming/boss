@@ -1,4 +1,0 @@
-interface:
-  display_name: "boss"
-  short_description: "Coordinate cheaper workers with session model selection"
-  default_prompt: "Use $boss with my chosen Worker model for this session, delegating bounded work with minimal context and verified results."

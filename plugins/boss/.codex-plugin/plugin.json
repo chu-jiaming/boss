@@ -1,0 +1,23 @@
+{
+  "name": "boss",
+  "version": "0.2.0",
+  "description": "Keep design and difficult work with Boss; delegate bounded routine implementation and functional checks with minimal coordination.",
+  "author": {
+    "name": "chu-jiaming",
+    "url": "https://github.com/chu-jiaming"
+  },
+  "repository": "https://github.com/chu-jiaming/boss",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "boss",
+    "shortDescription": "Keep judgment with Boss; delegate routine work",
+    "longDescription": "The current session model retains design, difficult implementation and final acceptance. Workers handle independently verifiable routine batches, bounded implementation and functional checks after key decisions are settled. Persistent model and effort settings; currently supports Codex.",
+    "developerName": "chu-jiaming",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Use $boss with gpt-5.6-luna at medium effort as the Worker for this session."
+    ]
+  }
+}

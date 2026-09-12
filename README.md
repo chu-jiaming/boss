@@ -1,114 +1,76 @@
-# Skills
+<div align="center">
 
-[English](README.md) | [简体中文](README.zh-CN.md)
+# boss
 
-Reusable agent skills for focused workflows. The first skill is **boss**: keep the current session model in charge of decisions, and delegate bounded execution to a selected Worker model.
+### 主模型负责判断，Worker 承担边界明确的常规工作
 
-## Available skills
+[English](README.en.md) · [安装指南](docs/install.md) · [技能源码](SKILL.md)
 
-| Skill | Purpose | Status |
-| --- | --- | --- |
-| [boss](skills/boss/SKILL.md) | Session-level Worker selection, minimal-context delegation, and evidence-based acceptance | Codex-first; structure validated and scenarios reviewed |
+![Boss 与 Worker 分工](assets/boss-hero.png)
 
-## How boss works
+**Codex 支持 · 模型与 effort 可控 · MIT**
 
-```text
-User request
-  → Boss: understand intent, constraints, dependencies, and acceptance criteria
-  → Worker: search, read, implement, test, or batch-process a bounded task
-  → Concise results + evidence
-  → Boss: verify, correct, integrate, and respond
-```
+</div>
 
-- **Keep your Boss.** The current session model remains in charge. Astra + Luna is an example, not a mandatory pairing.
-- **Choose once per session.** Subsequent requests retain the Worker selection; switch it whenever needed.
-- **Respect explicit models.** An unavailable requested model blocks delegation instead of silently falling back.
-- **Send minimal context.** On compatible Codex tools, explicitly use `fork_turns="none"`.
-- **Delegate when useful.** Tiny tasks can stay with Boss. Start with at most two independent Workers unless configured otherwise.
-- **Check evidence.** Workers report artifacts, actual checks, and unresolved issues; Boss decides whether the task is complete.
-- **Compare official-price costs.** Account for input, cached input, output, and rework. This is not a measurement of Plus allowance.
+boss 是一个独立的 Codex 技能。当前会话模型负责理解需求、设计、困难实现与最终验收；当工作边界清晰、结果可独立验证，且值得付出交接开销时，将常规实现、功能检查或重复批次交给 Worker。
 
-## Install in Codex
+启用 boss 不保证启动子代理。小任务、开放式设计和难以拆开的工作仍由主模型直接完成。关键设计或接口确定后，会重新判断一次是否适合委派，不为了委派制造步骤。
 
-Clone the repository, then link only the `boss` directory into your personal skills directory:
+## 快速开始
 
 ```sh
-git clone https://github.com/chu-jiaming/skills.git
-cd skills
+git clone https://github.com/chu-jiaming/boss.git
+cd boss
 mkdir -p "$HOME/.agents/skills"
-ln -s "$PWD/skills/boss" "$HOME/.agents/skills/boss"
+ln -s "$PWD" "$HOME/.agents/skills/boss"
 ```
 
-The link command deliberately does not overwrite an existing installation. If `boss` already exists there, inspect it before choosing whether to replace it. Avoid duplicate installations under multiple skill discovery paths.
-
-Codex supports symlinked skills. If the skill does not appear, restart Codex. See the [official skill documentation](https://learn.chatgpt.com/docs/build-skills).
-
-Alternatively, copy the `boss` directory into your project's `.agents/skills/` directory. A linked installation follows your checkout; update it with `git pull --ff-only` from the repository root. A copied installation must be updated separately.
-
-## Usage
-
-Select your preferred Boss model in the host, then start with:
+已有同名安装时，先按[安装指南](docs/install.md)核对来源。然后在 Codex 中选择主模型，发送：
 
 ```text
-$boss, use gpt-5.6-luna as the Worker for this session. Help me implement …
+$boss，Worker 使用 gpt-5.6-luna，effort medium。完成当前任务。
 ```
 
-Continue normally:
+Worker 的模型和 effort 在会话中保持，后续无需重复调用 `$boss`。它们必须受当前环境支持；boss 不修改主模型或全局配置。Astra + Luna 只是示例组合。
 
-```text
-Now implement the next feature.
-```
+## 如何分工
 
-Switch the selection:
-
-```text
-Switch the Worker to gpt-5.6-terra.
-```
-
-Or return to automatic selection:
-
-```text
-Use automatic low-cost Worker selection from now on.
-```
-
-Model names are examples and must be available in your session. A switch applies to new tasks and follow-ups; existing Workers finish by default without receiving more work. Request an immediate switch explicitly if you want existing work stopped and continued with the new model.
-
-## Compatibility and limits
-
-| Host | Current scope |
+| 工作 | 执行方式 |
 | --- | --- |
-| Codex | Native tool mapping and instruction-level scenario review; full end-to-end validation remains pending |
-| Claude Code | Adapter guidance; requires compatible tools/configuration and target-runtime validation |
-| OpenCode | Adapter guidance; requires compatible tools/configuration and target-runtime validation |
-| pi | Requires an installed compatible subagent extension; target-runtime validation pending |
+| 需求理解、开放式设计、架构、复杂调试 | Boss 直接处理 |
+| 接口和行为已定的独立常规功能 | 满足交接收益条件时委派 |
+| 按既定标准编写测试、执行检查并汇总缺陷 | 工作量足够时委派 |
+| 规则明确的重复批次 | 可委派，也可直接使用已有工具 |
+| 小修改、运行一条现成命令 | 直接执行 |
+| 视觉判断、最终验收与交付整合 | Boss 负责 |
 
-This is an instruction-based skill, not a scheduler service. It cannot add unavailable models, override host permissions, or create missing tool capabilities. Session selection is retained through host context/checkpoints; automatic recovery after restart is not guaranteed without host support. No cross-platform certification or measured cost-saving percentage is claimed.
+默认一个 Worker 处理一个完整工作包，一次交付、一次汇总。仅真正独立的工作可使用两个 Worker；不递归委派，不反复教学。小范围残余问题由 Boss 修复，设计问题由 Boss 接管。
 
-Official token prices are the main comparison metric. Estimates and measured usage must be labeled separately. The skill keeps your existing authentication and does not switch you to API billing.
-
-## Repository layout
+## 设置与状态
 
 ```text
-skills/
-├── README.md
-├── README.zh-CN.md
-├── LICENSE
-├── docs/boss-design.md
-└── skills/
-    └── boss/
-        ├── SKILL.md
-        ├── agents/openai.yaml
-        └── references/
+Worker effort 改为 low，模型保持不变。
+Worker 切换为 gpt-5.6-terra。
+Worker 模型和 effort 恢复自动选择。
 ```
 
-Read [the design](docs/boss-design.md), [the session protocol](skills/boss/references/protocol.md), or [cost accounting](skills/boss/references/cost.md) for details. Runtime use loads only the relevant references; the design document is not required context.
+首次启用或设置变化时展示 Boss、Worker 的模型与 effort，以及当前可用的执行模式。“已选择”不表示 Worker 已运行；缺失身份信息标记为 unknown，最近记录与当前轮证据分开标注。
 
-## Contributing
+## 安装、开发与边界
 
-Issues and pull requests are welcome. For compatibility reports, include the host/version, model selection, minimal reproduction, expected and actual behavior, and redacted evidence. Do not include API keys or private session transcripts.
+- 根目录 [SKILL.md](SKILL.md)、[agents/](agents/)、[references/](references/) 和会话辅助脚本是技能源码；不再使用 `skills/boss/` 源码层级。
+- [plugins/boss/](plugins/boss/) 是可安装的生成插件包；其中的 `skills/boss/` 仅为插件运行格式。
+- [安装指南](docs/install.md)说明独立技能、插件安装与更新；[设计文档](docs/boss-design.md)说明调度规则和验证范围。
+- 当前支持 Codex，其他 harness 尚未提供适配。核心指令不依赖 Node；可选会话读取脚本需要 Node.js 20+。
 
-Keep the entry point short, preserve explicit model constraints, and document any host limitations. Platform support claims should be backed by actual tests; scenario review alone is not end-to-end verification.
+```sh
+node scripts/build-plugins.mjs
+node scripts/build-plugins.mjs --check
+node --test scripts/*.test.mjs
+```
 
-## License
+目前没有足以公布的额度节省结论。委派、执行和验收都会产生消耗，收益取决于任务与模型配置。实验暂缓，不随发布包提供未完成实验或原始运行记录。
 
-[MIT](LICENSE) © 2026 chu-jiaming. You may use, modify, and redistribute the work, including commercially, subject to retaining the license notice. Model and platform services remain subject to their own terms.
+[提交问题](https://github.com/chu-jiaming/boss/issues)时，请附模型与 effort、最小复现步骤和脱敏结果。
+
+[MIT License](LICENSE) · © 2026 chu-jiaming

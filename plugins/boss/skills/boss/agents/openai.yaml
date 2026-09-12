@@ -1,0 +1,4 @@
+interface:
+  display_name: "boss"
+  short_description: "Offload bounded routine work with minimal coordination"
+  default_prompt: "Use $boss with gpt-5.6-luna at medium effort for this session, delegating substantial routine batches or bounded implementation and functional checks after key decisions are settled while keeping design and difficult work with the current session model."

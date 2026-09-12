@@ -1,0 +1,20 @@
+{
+  "name": "chu-jiaming-skills",
+  "interface": {
+    "displayName": "Chu Jiaming Skills"
+  },
+  "plugins": [
+    {
+      "name": "boss",
+      "source": {
+        "source": "local",
+        "path": "./plugins/boss"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
