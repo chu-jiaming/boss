@@ -1,0 +1,15 @@
+Use case: infographic-diagram
+Create one polished Chinese promotional infographic for the open-source Codex skill "boss", portrait 3:4 format, high resolution, suitable for Xiaohongshu sharing. Elegant editorial tech design, warm ivory background, near-black type, violet for Boss/Astra and teal for Worker/Luna, generous whitespace, crisp simplified Chinese typography. Add small tasteful dimensional abstract assistant/processor illustrations, but prioritize readable workflow over decoration.
+Exact headline: "boss"
+Exact subtitle: "复杂任务交给 Boss，常规工作交给 Worker。"
+Small eyebrow: "Codex Skill · 协作原理"
+Main flow must be unmistakable with clearly directed arrows:
+Top small input card "你的需求" points down to a prominent violet Boss card labeled "Boss · Astra" with three lines "理解需求 · 判断方向" / "设计方案 · 处理难题" / "保留最终验收".
+From Boss a right/down arrow labeled "交接任务与验收标准" goes to teal Worker card labeled "Worker · Luna 等" with three lines "常规实现" / "功能检查" / "重复批次".
+A SEPARATE return arrow from Worker back to Boss labeled "交回结果与验证证据". Clearly show this feedback loop and no direct Worker-to-final-delivery path.
+Near delegation arrow show a small gate annotation "关键决策已定 · 边界清晰 · 值得交接".
+From Boss downward a distinct arrow labeled "验收通过" to final card "交付结果".
+A small side note adjacent to Boss: "小任务直接完成，无需交接".
+Bottom highlighted value statement "Astra 的智能优势 × Worker 的成本优势".
+Small footer "实际节省取决于任务与交接成本" and "github.com/chu-jiaming/boss".
+Keep the entire visual coherent and easy to understand at mobile size, restrained refined infographic rather than crowded technical architecture. Exact Chinese text, no invented metrics, no savings percentages, no extra logos, no watermark.
