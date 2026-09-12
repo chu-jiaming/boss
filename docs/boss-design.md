@@ -1,6 +1,6 @@
 # boss 设计与验证边界
 
-更新：2026-09-12。[中文首页](../README.md) · [技能入口](../SKILL.md)
+更新：2026-09-12。[中文首页](../README.md) · [技能入口](../skills/boss/SKILL.md)
 
 ## 目标
 
@@ -12,10 +12,10 @@ Astra + Luna 是推荐展示的示例组合，Boss 不强制绑定 Astra。模�
 
 | 层 | 职责 | 当前实现 |
 | --- | --- | --- |
-| 通用入口 | 委派判断、职责、验收原则 | `SKILL.md` |
-| 会话协议 | 模型与 effort 保持、切换、展示、任务包 | `references/protocol.md` |
-| harness 适配器 | 工具参数、配置映射、生命周期、身份来源 | `references/codex.md` |
-| 可选辅助脚本 | 读取本地会话记录，不决定调度策略 | `scripts/codex-session-settings.mjs` |
+| 通用入口 | 委派判断、职责、验收原则 | `skills/boss/SKILL.md` |
+| 会话协议 | 模型与 effort 保持、切换、展示、任务包 | `skills/boss/references/protocol.md` |
+| harness 适配器 | 工具参数、配置映射、生命周期、身份来源 | `skills/boss/references/codex.md` |
+| 可选辅助脚本 | 读取本地会话记录，不决定调度策略 | `skills/boss/scripts/codex-session-settings.mjs` |
 
 当前只启用 Codex。其他 harness 后续通过新适配器接入，旧草稿保留在 Git 历史中，不随运行包分发。宿主工具名、配置路径与文件格式留在适配层，通用协议不依赖 Codex。
 

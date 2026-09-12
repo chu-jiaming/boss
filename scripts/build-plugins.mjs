@@ -10,6 +10,7 @@ if (args.length > 1 || (args.length === 1 && args[0] !== '--check')) {
   process.exit(2);
 }
 const check = args[0] === '--check';
+const skill = join(root, 'skills/boss');
 const plugin = join(root, 'plugins/boss');
 
 async function files(dir, prefix = '') {
@@ -43,12 +44,12 @@ try {
   if (entries.length !== 1 || entries[0].source.source !== 'local' || entries[0].source.path !== './plugins/boss') throw new Error('Marketplace must resolve boss to ./plugins/boss');
   const expected = new Map();
   // Explicit runtime allowlist: never ship local environments or design documents.
-  expected.set('boss/SKILL.md', await readFile(join(root, 'SKILL.md')));
+  expected.set('boss/SKILL.md', await readFile(join(skill, 'SKILL.md')));
   for (const part of ['agents', 'references']) {
-    await safeDirectory(join(root, part));
-    for (const [name, data] of await files(join(root, part))) expected.set(`boss/${part}/${name}`, data);
+    await safeDirectory(join(skill, part));
+    for (const [name, data] of await files(join(skill, part))) expected.set(`boss/${part}/${name}`, data);
   }
-  expected.set('boss/scripts/codex-session-settings.mjs', await readFile(join(root, 'scripts/codex-session-settings.mjs')));
+  expected.set('boss/scripts/codex-session-settings.mjs', await readFile(join(skill, 'scripts/codex-session-settings.mjs')));
   const license = await readFile(join(root, 'LICENSE'));
   const licensePath = join(plugin, 'LICENSE');
   try { if ((await lstat(licensePath)).isSymbolicLink()) throw new Error('Plugin LICENSE must not be a symlink'); }
@@ -69,7 +70,7 @@ try {
       await writeFile(target, data);
     }
     await writeFile(licensePath, license);
-    console.log(`Built ${relative(root, plugin)} from repository root (${expected.size} runtime files).`);
+    console.log(`Built ${relative(root, plugin)} from skills/boss (${expected.size} runtime files).`);
   }
 } catch (error) {
   console.error(error.message);

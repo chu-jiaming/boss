@@ -10,7 +10,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 test('build detects drift, removes stale generated files, and rejects symlinks', async () => {
   const fixture = await mkdtemp(join(tmpdir(), 'boss-plugin-test-'));
   try {
-    for (const path of ['scripts/build-plugins.mjs', 'SKILL.md', 'agents', 'references', 'scripts/codex-session-settings.mjs', 'plugins/boss/.codex-plugin', '.agents/plugins', 'LICENSE']) {
+    for (const path of ['scripts/build-plugins.mjs', 'skills/boss', 'plugins/boss/.codex-plugin', '.agents/plugins', 'LICENSE']) {
       await mkdir(dirname(join(fixture, path)), { recursive: true });
       await cp(join(root, path), join(fixture, path), { recursive: true });
     }
@@ -19,7 +19,7 @@ test('build detects drift, removes stale generated files, and rejects symlinks',
     assert.equal(run('--check').status, 0);
     assert.equal(
       await readFile(join(fixture, 'plugins/boss/skills/boss/scripts/codex-session-settings.mjs'), 'utf8'),
-      await readFile(join(fixture, 'scripts/codex-session-settings.mjs'), 'utf8'),
+      await readFile(join(fixture, 'skills/boss/scripts/codex-session-settings.mjs'), 'utf8'),
       'the optional settings helper must ship with the skill'
     );
     const copied = join(fixture, 'plugins/boss/skills/boss/SKILL.md');
@@ -29,7 +29,7 @@ test('build detects drift, removes stale generated files, and rejects symlinks',
     await writeFile(join(fixture, 'plugins/boss/skills/extra.txt'), 'stale extra');
     assert.equal(run().status, 0);
     assert.equal(run('--check').status, 0);
-    await symlink(join(fixture, 'LICENSE'), join(fixture, 'references/external.md'));
+    await symlink(join(fixture, 'LICENSE'), join(fixture, 'skills/boss/references/external.md'));
     assert.equal(run().status, 1);
     assert.equal(run('--unsupported').status, 2);
   } finally { await rm(fixture, { recursive: true, force: true }); }

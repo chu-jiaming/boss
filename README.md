@@ -2,75 +2,96 @@
 
 # boss
 
-### 主模型负责判断，Worker 承担边界明确的常规工作
+**关键判断交给 Boss，明确任务交给 Worker。**
 
-[English](README.en.md) · [安装指南](docs/install.md) · [技能源码](SKILL.md)
+[English](README.en.md) · [安装指南](docs/install.md)
+
+[![GitHub Stars](https://img.shields.io/github/stars/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/stargazers)
+[![License](https://img.shields.io/github/license/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/blob/main/LICENSE)
 
 ![Boss 与 Worker 分工](assets/boss-hero.png)
 
-**Codex 支持 · 模型与 effort 可控 · MIT**
-
 </div>
 
-boss 是一个独立的 Codex 技能。当前会话模型负责理解需求、设计、困难实现与最终验收；当工作边界清晰、结果可独立验证，且值得付出交接开销时，将常规实现、功能检查或重复批次交给 Worker。
+boss 是一个 Codex 技能，让当前会话的主模型负责理解需求、设计、困难实现与最终验收。适合交接的常规工作由 Worker 承担，你可以指定它使用的模型和推理强度（effort）。
 
-启用 boss 不保证启动子代理。小任务、开放式设计和难以拆开的工作仍由主模型直接完成。关键设计或接口确定后，会重新判断一次是否适合委派，不为了委派制造步骤。
+> [!WARNING]
+> boss 更适合边界清晰、可独立验收且工作量值得交接的常规实现、功能检查和重复任务。简单修改、开放式设计或复杂判断通常由 Boss 直接处理。启用 boss 不代表一定会启动 Worker，也不保证节省额度，尤其是在简单任务或设计场景中；委派、执行和验收本身都会消耗额度。
 
 ## 快速开始
+
+**1. 安装** — 将下面这句话发给 Codex：
+
+```text
+Install the boss skill from https://github.com/chu-jiaming/boss
+```
+
+也可以选择以下任一方式。技能和插件二选一即可；已有安装请先查看[更新与迁移说明](docs/install.md)。
+
+<details>
+<summary>手动安装技能</summary>
 
 ```sh
 git clone https://github.com/chu-jiaming/boss.git
 cd boss
 mkdir -p "$HOME/.agents/skills"
-ln -s "$PWD" "$HOME/.agents/skills/boss"
+ln -s "$PWD/skills/boss" "$HOME/.agents/skills/boss"
 ```
 
-已有同名安装时，先按[安装指南](docs/install.md)核对来源。然后在 Codex 中选择主模型，发送：
+</details>
+
+<details>
+<summary>从 Marketplace 安装插件</summary>
+
+```sh
+codex plugin marketplace add chu-jiaming/boss
+```
+
+然后在来源 **Charm1ng Skills** 中安装 **boss**。
+
+</details>
+
+**2. 开始使用** — 在 Codex 中选好主模型，然后在新任务中输入：
 
 ```text
-$boss，Worker 使用 gpt-5.6-luna，effort medium。完成当前任务。
+$boss，Worker 使用 gpt-5.6-luna，effort medium。
+为项目中的日期工具函数补充单元测试，覆盖正常输入与边界情况，并运行测试。
 ```
 
-Worker 的模型和 effort 在会话中保持，后续无需重复调用 `$boss`。它们必须受当前环境支持；boss 不修改主模型或全局配置。Astra + Luna 只是示例组合。
+模型组合只是示例，请使用当前环境支持的模型与 effort。
 
 ## 如何分工
 
-| 工作 | 执行方式 |
+| 执行方 | 负责的工作 |
 | --- | --- |
-| 需求理解、开放式设计、架构、复杂调试 | Boss 直接处理 |
-| 接口和行为已定的独立常规功能 | 满足交接收益条件时委派 |
-| 按既定标准编写测试、执行检查并汇总缺陷 | 工作量足够时委派 |
-| 规则明确的重复批次 | 可委派，也可直接使用已有工具 |
-| 小修改、运行一条现成命令 | 直接执行 |
-| 视觉判断、最终验收与交付整合 | Boss 负责 |
+| Boss | 需求理解、设计、架构、复杂调试、困难实现与最终验收 |
+| Worker | 接口与行为已定、可独立验证且值得交接的常规实现、功能检查和重复批次 |
+| 直接执行 | 小修改、一条现成命令，或已有工具即可高效完成的工作 |
 
-默认一个 Worker 处理一个完整工作包，一次交付、一次汇总。仅真正独立的工作可使用两个 Worker；不递归委派，不反复教学。小范围残余问题由 Boss 修复，设计问题由 Boss 接管。
+默认一个 Worker 处理一个完整工作包，一次交付、一次汇总。仅真正独立的工作可同时使用两个 Worker，且受环境并发限制；不递归委派。小范围残余问题由 Boss 修复，未解决的设计问题由 Boss 接管。
 
-## 设置与状态
+## 调整 Worker
+
+Worker 的模型和 effort 在当前会话中持续有效，后续无需重复调用 `$boss`。想调整时，直接告诉 Codex：
 
 ```text
 Worker effort 改为 low，模型保持不变。
+```
+
+```text
 Worker 切换为 gpt-5.6-terra。
+```
+
+```text
 Worker 模型和 effort 恢复自动选择。
 ```
 
-首次启用或设置变化时展示 Boss、Worker 的模型与 effort，以及当前可用的执行模式。“已选择”不表示 Worker 已运行；缺失身份信息标记为 unknown，最近记录与当前轮证据分开标注。
+boss 不修改主模型或全局配置。启用或调整设置时，会显示 Boss、Worker 的模型与 effort，以及当前执行模式。
 
-## 安装、开发与边界
+## 了解更多
 
-- 根目录 [SKILL.md](SKILL.md)、[agents/](agents/)、[references/](references/) 和会话辅助脚本是技能源码；不再使用 `skills/boss/` 源码层级。
-- [plugins/boss/](plugins/boss/) 是可安装的生成插件包；其中的 `skills/boss/` 仅为插件运行格式。
-- [安装指南](docs/install.md)说明独立技能、插件安装与更新；[设计文档](docs/boss-design.md)说明调度规则和验证范围。
-- 当前支持 Codex，其他 harness 尚未提供适配。核心指令不依赖 Node；可选会话读取脚本需要 Node.js 20+。
+目前仅支持 Codex。核心指令无额外运行依赖，可选的设置读取脚本需要 Node.js 20+。
 
-```sh
-node scripts/build-plugins.mjs
-node scripts/build-plugins.mjs --check
-node --test scripts/*.test.mjs
-```
-
-目前没有足以公布的额度节省结论。委派、执行和验收都会产生消耗，收益取决于任务与模型配置。实验暂缓，不随发布包提供未完成实验或原始运行记录。
-
-[提交问题](https://github.com/chu-jiaming/boss/issues)时，请附模型与 effort、最小复现步骤和脱敏结果。
+[安装、更新与开发](docs/install.md) · [技能源码](skills/boss/SKILL.md) · [设计说明](docs/boss-design.md) · [反馈问题](https://github.com/chu-jiaming/boss/issues)
 
 [MIT License](LICENSE) · © 2026 chu-jiaming

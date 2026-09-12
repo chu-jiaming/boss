@@ -1,69 +1,97 @@
+<div align="center">
+
 # boss
 
-Keep judgment with the primary model; delegate bounded routine work to a Worker.
+**Let Boss make the calls. Give Worker well-defined tasks.**
 
-[简体中文](README.md) · [Installation](docs/install.md) · [Skill source](SKILL.md)
+[简体中文](README.md) · [Installation guide](docs/install.md)
 
-![Boss and Worker](assets/boss-hero.png)
+[![GitHub Stars](https://img.shields.io/github/stars/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/stargazers)
+[![License](https://img.shields.io/github/license/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/blob/main/LICENSE)
 
-boss is a standalone Codex skill. The current session model handles understanding, design, difficult implementation and final acceptance. Workers receive routine implementation, functional verification or repetitive batches when the boundaries are clear, results are independently verifiable and the work justifies coordination overhead.
+![Boss and Worker responsibilities](assets/boss-hero.png)
 
-Activation does not require delegation. Small tasks, open-ended design and tightly coupled work remain with Boss. After key design or interface decisions, reassess delegation once without inventing extra stages.
+</div>
+
+boss is a Codex skill that keeps understanding, design, difficult implementation and final acceptance with the current session model. Workers handle routine work suited to delegation, using the model and reasoning effort you choose.
+
+> [!WARNING]
+> boss works best for routine implementation, functional checks and repetitive tasks with clear boundaries, independently verifiable results and enough work to justify a handoff. Simple edits, open-ended design and complex judgment usually stay with Boss. Activating boss does not necessarily start a Worker or guarantee usage savings, especially for simple tasks or design work; delegation, execution and acceptance all consume usage allowance.
 
 ## Quick start
+
+**1. Install** — Send this to Codex:
+
+```text
+Install the boss skill from https://github.com/chu-jiaming/boss
+```
+
+Or choose either option below. Install the skill or the plugin, not both. For an existing installation, check the [update and migration instructions](docs/install.md) first.
+
+<details>
+<summary>Install the skill manually</summary>
 
 ```sh
 git clone https://github.com/chu-jiaming/boss.git
 cd boss
 mkdir -p "$HOME/.agents/skills"
-ln -s "$PWD" "$HOME/.agents/skills/boss"
+ln -s "$PWD/skills/boss" "$HOME/.agents/skills/boss"
 ```
 
-For an existing installation, check its source first using the [installation guide](docs/install.md). Select the primary model in Codex, then ask:
+</details>
+
+<details>
+<summary>Install the plugin from Marketplace</summary>
+
+```sh
+codex plugin marketplace add chu-jiaming/boss
+```
+
+Then install **boss** from **Charm1ng Skills**.
+
+</details>
+
+**2. Start a task** — Select your primary model in Codex, then ask in a new task:
 
 ```text
-$boss, use gpt-5.6-luna at medium effort as the Worker. Complete the current task.
+$boss, use gpt-5.6-luna at medium effort as the Worker.
+Add unit tests for this project's date utilities, covering normal inputs and edge cases, and run them.
 ```
 
-Worker model and effort persist through the session. They must be supported by the current environment. Boss does not change the primary model or global configuration; Astra + Luna is an example pairing.
+This model pairing is just an example. Use models and effort levels supported by your environment.
 
-## Responsibilities
+## How work is shared
 
-| Work | Executor |
+| Executor | Responsibilities |
 | --- | --- |
-| Understanding, visual design, architecture, complex debugging | Boss |
-| Conventional features with settled contracts | Worker when handoff is worthwhile |
-| Writing functional tests and reporting reproducible defects | Worker when substantial and independent |
-| Repetitive work under established rules | Worker or an existing deterministic tool |
-| Small edits or a single existing command | Direct execution |
-| Visual judgment, final acceptance and integration | Boss |
+| Boss | Understanding, design, architecture, complex debugging, difficult implementation and final acceptance |
+| Worker | Routine implementation, functional checks and repetitive batches with settled contracts, verifiable results and a worthwhile handoff |
+| Direct execution | Small edits, a single existing command or work an existing tool can handle efficiently |
 
-Default to one Worker per coherent package, with one handoff and one consolidated result. At most two independent packages may run concurrently, subject to host limits. No recursive delegation or continuous coaching. Boss fixes small residual defects and takes over unresolved design work.
+By default, one Worker handles a complete work package with one handoff and one consolidated result. At most two genuinely independent packages may run concurrently, subject to environment limits. No recursive delegation. Boss fixes small residual defects and takes over unresolved design work.
 
-## Settings
+## Adjust the Worker
+
+Worker model and effort persist through the current session; you do not need to repeat `$boss` on follow-ups. To change them, tell Codex:
 
 ```text
 Change Worker effort to low; keep the model.
+```
+
+```text
 Switch Worker to gpt-5.6-terra.
+```
+
+```text
 Return Worker model and effort to automatic selection.
 ```
 
-On activation or a settings change, show Boss and Worker model/effort and the available execution mode. Selected settings do not mean a Worker has started. Missing identity is unknown; latest recorded settings are distinguished from current-turn evidence.
+boss does not change the primary model or global configuration. On activation or settings changes, it shows the Boss and Worker models, their effort levels and the current execution mode.
 
-## Development and limitations
+## Learn more
 
-The root `SKILL.md`, `agents/`, `references/` and session helper are the source. `plugins/boss/` is the generated installation package; its nested skill directory is packaging only. See [installation and updates](docs/install.md) and the [design notes](docs/boss-design.md).
+Currently supports Codex only. Core instructions need no additional runtime; the optional settings helper requires Node.js 20+.
 
-```sh
-node scripts/build-plugins.mjs
-node scripts/build-plugins.mjs --check
-node --test scripts/*.test.mjs
-```
-
-Currently supports Codex only. Core instructions need no Node runtime; the optional settings helper needs Node.js 20+.
-
-There is no established allowance-saving claim. Delegation, execution and acceptance all consume resources. Experiments are paused; unfinished fixtures and raw run records are excluded from publication.
-
-[Report an issue](https://github.com/chu-jiaming/boss/issues) with model/effort, a minimal reproduction and redacted evidence.
+[Installation, updates and development](docs/install.md) · [Skill source](skills/boss/SKILL.md) · [Design notes](docs/boss-design.md) · [Report an issue](https://github.com/chu-jiaming/boss/issues)
 
 [MIT License](LICENSE) · © 2026 chu-jiaming

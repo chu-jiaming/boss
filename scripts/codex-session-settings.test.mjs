@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm, chmod } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { readSessionSettings, parseArgs } from './codex-session-settings.mjs';
+import { readSessionSettings, parseArgs } from '../skills/boss/scripts/codex-session-settings.mjs';
 
 const record = (type, payload, timestamp = '2026-09-09T05:00:00Z') => JSON.stringify({ type, payload, timestamp }) + '\n';
 const meta = id => record('session_meta', { id });
