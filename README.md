@@ -4,7 +4,7 @@
 
 **关键判断交给 Boss，明确任务交给 Worker。**
 
-[English](README.en.md) · [安装指南](docs/install.md)
+[English](README.en.md)
 
 [![GitHub Stars](https://img.shields.io/github/stars/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/stargazers)
 [![License](https://img.shields.io/github/license/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/blob/main/LICENSE)
@@ -15,8 +15,19 @@
 
 boss 是一个 Codex 技能，让当前会话的主模型负责理解需求、设计、困难实现与最终验收。适合交接的常规工作由 Worker 承担，你可以指定它使用的模型和推理强度（effort）。
 
+> [!NOTE]
+> **设计初衷**
+>
+> boss 灵感源于 Astra 成本高的痛点：希望把 Astra 的高智能优势集中用在需求理解、开放式设计、方向判断和最终验收等关键任务上，将关键决策已定、边界清晰且有交接收益的重复批次、常规实现或功能检查交给成本更低的 Worker 模型。
+>
+> 典型组合是由 Astra 担任 Boss，让 Luna 等成本较低的模型担任 Worker，结合 Astra 的智能优势与 Worker 的成本优势，兼顾交付质量与额度使用效率。
+
 > [!WARNING]
-> boss 更适合边界清晰、可独立验收且工作量值得交接的常规实现、功能检查和重复任务。简单修改、开放式设计或复杂判断通常由 Boss 直接处理。启用 boss 不代表一定会启动 Worker，也不保证节省额度，尤其是在简单任务或设计场景中；委派、执行和验收本身都会消耗额度。
+> boss 更适合边界清晰、可独立验收且工作量值得交接的常规实现、功能检查和重复任务。简单修改、开放式设计或复杂判断通常由 Boss 直接处理。
+>
+> 启用 boss 不代表一定会启动 Worker，也不保证节省额度，尤其是在简单任务或设计场景中；委派、执行和验收本身都会消耗额度。
+>
+> 实际模型可用性、路由和用量仍由当前环境决定，这种组合不保证固定的额度节省。
 
 ## 快速开始
 
@@ -26,10 +37,10 @@ boss 是一个 Codex 技能，让当前会话的主模型负责理解需求、�
 Install the boss skill from https://github.com/chu-jiaming/boss
 ```
 
-也可以选择以下任一方式。技能和插件二选一即可；已有安装请先查看[更新与迁移说明](docs/install.md)。
+或选择以下任一手动方式：
 
 <details>
-<summary>手动安装技能</summary>
+<summary>从git安装</summary>
 
 ```sh
 git clone https://github.com/chu-jiaming/boss.git
@@ -44,10 +55,13 @@ ln -s "$PWD/skills/boss" "$HOME/.agents/skills/boss"
 <summary>从 Marketplace 安装插件</summary>
 
 ```sh
-codex plugin marketplace add chu-jiaming/boss
+codex plugin marketplace add chu-jiaming/boss #添加 Marketplace 源
+codex plugin add boss@chu-jiaming-skills #安装boss
+codex plugin list #查看已安装插件
 ```
 
-然后在来源 **Charm1ng Skills** 中安装 **boss**。
+运行``codex plugin marketplace add chu-jiaming/boss
+``成功后，也可以在 Codex 桌面 App 的 **Plugins → Personal** 中找到并选择安装 **boss**。
 
 </details>
 

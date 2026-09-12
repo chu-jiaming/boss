@@ -4,7 +4,7 @@
 
 **Let Boss make the calls. Give Worker well-defined tasks.**
 
-[简体中文](README.md) · [Installation guide](docs/install.md)
+[简体中文](README.md)
 
 [![GitHub Stars](https://img.shields.io/github/stars/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/stargazers)
 [![License](https://img.shields.io/github/license/chu-jiaming/boss)](https://github.com/chu-jiaming/boss/blob/main/LICENSE)
@@ -15,8 +15,19 @@
 
 boss is a Codex skill that keeps understanding, design, difficult implementation and final acceptance with the current session model. Workers handle routine work suited to delegation, using the model and reasoning effort you choose.
 
+> [!NOTE]
+> **Design motivation**
+>
+> boss was inspired by the high cost of using Astra: the aim is to focus Astra's intelligence on key tasks such as understanding requirements, open-ended design, direction-setting and final acceptance, while handing repetitive batches, routine implementation or functional checks to lower-cost Worker models when key decisions are settled, boundaries are clear and the handoff is worthwhile.
+>
+> A typical pairing uses Astra as Boss and a lower-cost model such as Luna as Worker, combining Astra's intelligence with Worker's cost advantage to balance delivery quality and efficient use of the usage allowance.
+
 > [!WARNING]
-> boss works best for routine implementation, functional checks and repetitive tasks with clear boundaries, independently verifiable results and enough work to justify a handoff. Simple edits, open-ended design and complex judgment usually stay with Boss. Activating boss does not necessarily start a Worker or guarantee usage savings, especially for simple tasks or design work; delegation, execution and acceptance all consume usage allowance.
+> boss works best for routine implementation, functional checks and repetitive tasks with clear boundaries, independently verifiable results and enough work to justify a handoff. Simple edits, open-ended design and complex judgment usually stay with Boss.
+>
+> Activating boss does not necessarily start a Worker or guarantee usage savings, especially for simple tasks or design work; delegation, execution and acceptance all consume usage allowance.
+>
+> Actual model availability, routing and usage are determined by the current environment; this pairing does not guarantee fixed usage savings.
 
 ## Quick start
 
@@ -26,10 +37,10 @@ boss is a Codex skill that keeps understanding, design, difficult implementation
 Install the boss skill from https://github.com/chu-jiaming/boss
 ```
 
-Or choose either option below. Install the skill or the plugin, not both. For an existing installation, check the [update and migration instructions](docs/install.md) first.
+Or choose either manual installation method below:
 
 <details>
-<summary>Install the skill manually</summary>
+<summary>Install from Git</summary>
 
 ```sh
 git clone https://github.com/chu-jiaming/boss.git
@@ -44,10 +55,12 @@ ln -s "$PWD/skills/boss" "$HOME/.agents/skills/boss"
 <summary>Install the plugin from Marketplace</summary>
 
 ```sh
-codex plugin marketplace add chu-jiaming/boss
+codex plugin marketplace add chu-jiaming/boss # add the Marketplace source
+codex plugin add boss@chu-jiaming-skills # install boss
+codex plugin list # list installed plugins
 ```
 
-Then install **boss** from **Charm1ng Skills**.
+After `codex plugin marketplace add chu-jiaming/boss` succeeds, you can also open the Codex desktop app and find and install **boss** under **Plugins → Personal**.
 
 </details>
 
